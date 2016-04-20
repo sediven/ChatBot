@@ -1,0 +1,138 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage{polski}
+\usepackage{graphicx} 
+\usepackage[utf8]{inputenc}
+
+\title{Specyfikacja implementacyjna generatora tekstu}
+\author{Konrad Olszewski}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+
+\section{Język}
+\\
+Program będzie napisany w języku c.
+\section {Opis}
+\subsection{Użytkownik docelowy.}
+\\
+Pogram dedykowany jest studentom oraz pracownikom Politechniki Warszawskiej.
+
+\section{Podział na klasy - opis}
+
+\subsection{Opis klas i metod}
+\\
+Program zostanie podzielony na następujące klasy:
+\begin{enumerate}
+\item Ngram.class - klasa będąca pojedynczym ngramem danego rzedu prefix (String ngram) + sufixy(String []nastepcy) + ilość wystąpień danego sufixu(ileRazy[])
+
+\begin{itemize}
+	\item rozszerzNgram(String slowo) - rozszerza Ngram o dodatkowy sufix
+	\item NgramRandom() - zwraca losowy sufix Ngramu
+	\item NgramSuma() - zwraca ilość wysąpień Ngramu
+\end{itemize}
+\\
+\item
+Read.class - klasa wczytujaca plik bazowy, generuje ona listę ngramów z pliku z tekstem, bądź ze Stringa. Zawiera listęNgramów danego stopnia, listęngramów jednoskowych, poziom ngramu, oraz ścieżkę do bazy
+
+\begin{itemize}
+	\item String czytaj(String path) - klasa czyta plik który dostaje i zwraca go w formie Stringa
+	\item przetwórz(ArrayList $\langle Ngram \rangle$ ngramy,String in, Integer ngramLvl) - Pełną listę słow (in) dzieli na ngramy, następnie sprawdza zawieranie kolejnych ngramów w już istniejącej ich liście. Po sprawdzeniu czy istnieje dodaje nowy Ngram do listy lub rozszerza istniejacy ngram.
+	\item Sortuj() - sortuje listę nramów po ilości wystąpień
+\end{itemize}
+\\ 
+\item
+Gui.class - klasa generujaca interfejs graficzny 
+\begin{itemize}
+	\item public void actionPerformed( ActionEvent e) - klasa odpowiadajaca za akcje
+\end{itemize}
+\\
+
+\item
+Txtgenerator.class - klasa generujaca tekst zadanej dlugosci na podstawie listy ngramow oraz odpowiedzi użytkownika.
+\item
+Statistics.class - klasa generujaca statystyki tekstow. Zawiera 
+\begin{itemize}
+	\item 
+String najczestszeWyrazy()
+\item
+String najczestszeSlowa()
+\item
+String najczestsze(String in, List $\langle Ngram \rangle$ ngramy) - wyznacz listę n najpopularniejszych, w zalezności od listy, ngramów/ słów
+\end{itemize}
+\end{enumerate}
+\subsection {Opis GUI}
+Gui będzie podzielone na dwie części. Główne okno czatu które wygląda jak na Załączonym obrazku g1.png.
+Po prawej stronie będzie widoczna część statystyki. Tutaj wyświetlana będzie bieżąca statystyka tekstu.
+\section{OPIS FUNKCJONALNOŚCI}
+\subsection{Jak korzystać z programu?}
+\\
+Aby korzystac z programu nalezy wczytac plik bazowy.
+Nastepnie pojawia sie mozliwosc wpisywania wiadomosci na ktore uzyskiwane beda odpowiedzi w oknie chatu.\\
+Po prawej stronie okna wyświetlana będzie aktualna statystyka tekstu.
+\\
+Ponadto program będzie posiadał nastepujace funkcje:
+\\
+\begin{enumerate}
+\item
+wybrania nicku
+\item
+wychwycenie błędów we wpisywanym tekście 
+\end{enumerate}
+\section{SCENARIUSZ DZIAŁANIA PROGRAMU.}
+\subsection{Scenariusz ogólny:}
+\begin{enumerate}
+\item
+Uruchomienie programu
+\item
+Wprowadzenie nicku
+\item
+Wprowadzenie wiadomości
+\item 
+Uzyskanie wygenerowanej odpowiedzi
+\item
+Uzyskanie wygenerowanych statystyk
+\end{enumerate}
+\\
+
+\section{TESTOWANIE.}
+
+\subsection{Ogólny przebieg testowania:}
+\\
+Program będzie testowany za pomoca programu eclipse, który będzie znajdował poszczególne błędy. Będzie również testowany na plikach różnej wielkości.
+Program zostanie również przetestowany za pomocą testów jednostkowych JUnit.
+Przykład testu dla klasy Read.
+\\
+public class ReadTest {
+\\
+	\\@Test
+	\\public void testRead() {
+		\\String tekst = "Alibaba i czterdziestu rozbójników buszuj. Alibaba i 12";
+		\\Read r = new Read( tekst, true);
+		\\assertEquals(r.listaNgram.get(0).slowo, "Alibaba i");
+\\		assertEquals(r.listaNgram.get(1).slowo, "i czterdziestu");
+	\\	assertEquals(r.listaNgram.get(2).slowo, "czterdziestu rozbójników");
+		\\assertEquals(r.listaNgram.get(3).slowo, "rozbójników buszuj.");
+\\		assertEquals(r.listaNgram.get(4).slowo, "buszuj. Alibaba");
+\\
+	\\	assertEquals(r.listaNgram.get(0).nastepcy[0], "czterdziestu");
+		\\assertEquals(r.listaNgram.get(0).nastepcy[1], "12");
+		\\
+	\\	assertEquals(r.listaNgram.get(1).nastepcy[0], "rozbójników");
+	\\	assertEquals(r.listaNgram.get(2).nastepcy[0], "buszuj.");
+	\\	assertEquals(r.listaNgram.get(3).nastepcy[0], "Alibaba");
+	\\	assertEquals(r.listaNgram.get(4).nastepcy[0], "i");
+		
+\\	}
+\section{DIAGRAM UML}
+\begin{figure}[h]
+	\centering
+		\includegraphics[width=1\textwidth]{C:/Users/ja/Desktop/diagramUML.png}
+	\label{fig:diagramUML}
+\end{figure}
+
+
+
+\end{document}
